@@ -19,21 +19,23 @@ const getBooksBorrowedCount = (books) => {
 
 
 const getMostCommonGenres = (books) => {
-  const genreCount = books.reduce((acc, book)=>{
+  const countGenres = (acc, book)=> {
     if (acc[book.genre]) {
       acc[book.genre]++;
-    } else{
-      acc[book.genre] = 1;
+    } else {
+      acc[book.genre]= 1;
     }
     return acc;
-  },{});
-  const sortedGenres = Object.keys(genreCount);
-  sortedGenres.sort((a,b) =>{
+  }
+  const genreCount = books.reduce(countGenres, {});
+  sortGenres = (a,b) => {
     return genreCount[b] - genreCount[a]
-  });
-  const genreNameAndCount = sortedGenres.map((genre)=>{
-    return ({name:genre, count: genreCount[genre]})
-  });
+  };
+  const sortedGenres = Object.keys(genreCount).sort(sortGenres);
+  const getGenreNameAndCount = (genre) =>{
+    return {name:genre, count: genreCount[genre]}
+  };
+const genreNameAndCount = sortedGenres.map(getGenreNameAndCount);
   return genreNameAndCount.splice(0,5)
 }
 
