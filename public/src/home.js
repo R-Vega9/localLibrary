@@ -39,14 +39,22 @@ const genreNameAndCount = sortedGenres.map(getGenreNameAndCount);
   return genreNameAndCount.splice(0,5)
 }
 
-const getMostPopularBooks = (books) => {
 
-  return books.map((book) => {
-    return {name: book.title, count: book.borrows.length}
-   })
-   .sort((a, b) => (a.count < b.count ? 1 : -1))
-   .slice(0, 5)
- }
+const getMostPopularBooks = (books) =>{
+  let popularBooks = [];
+  const borrows = books.reduce((acc, book) => {
+    popularBooks.push({ name: book.title, count: book.borrows.length });
+  }, []);
+
+  return topFive(popularBooks);
+}
+
+
+//Helper Function
+const topFive = (array) =>{
+  let popularBooks = array.sort((countA, countB) => (countA.count < countB.count ? 1 : -1)).slice(0, 5);
+  return popularBooks;
+}
 
  const getMostPopularAuthors = (books, authors) => {
   const authorWithBorrows = authors.map((author) =>{
@@ -60,7 +68,7 @@ const getMostPopularBooks = (books) => {
     return { name: `${author.name.first} ${author.name.last}`, count: count };
   });
   const sortedAuthors = authorWithBorrows.sort((a, b) => b.count - a.count);
-  return sortedAuthors.slice(0, 5);
+  return topFive(sortedAuthors);
 }
   
 module.exports = {
